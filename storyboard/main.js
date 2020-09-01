@@ -27,6 +27,7 @@ export class Storyboard{
                     this.sprites[j].sprite.scale.set(1)
                     this.sprites[j].sprite.x = (this.app.screen.width / 2) * width;
                     this.sprites[j].sprite.y = (this.app.screen.height / 2) * height;
+                    this.sprites[j].sprite.visible = false
                     if(this.sprites[j].isAdditive){
                         this.sprites[j].sprite.blendMode = PIXI.BLEND_MODES.ADD;
                     }
@@ -64,10 +65,12 @@ export class Storyboard{
                         let fade = sprite.fadeTiming[j]
                         let opacity = fade.valueAtTime(position)
                         if(fade.isActive(position)){
+                            sprite.sprite.visible = true
                             sprite.sprite.alpha = opacity
-                        }else{
-                            sprite.sprite.alpha = 0
                         }
+                        /*else{
+                            sprite.sprite.visible = false
+                        }*/
                     }
                 }
 

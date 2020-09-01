@@ -58,8 +58,48 @@ export default {
       },
       loadStars(){
 
+        let bg = new Sprite('./image/wallpaper.jpg')
+        bg.scale({
+          startTime: 0,
+          endTime: 154000,
+          startScale: .625,
+          endScale: .625
+        })
+
+        bg.fade({
+          startTime: 0,
+          endTime: 12000,
+          startFade: 0,
+          endFade: 1,
+        })
+
+        bg.fade({
+          startTime: 12000,
+          endTime: 154000,
+          startFade: 1,
+          endFade: 1,
+        })
+
+
+        bg.moveX({
+          startTime: 0,
+          endTime: 154000,
+          startX: 420,
+          endX: 420,
+        })
+
+        bg.moveY({
+          startTime: 0,
+          endTime: 154000,
+          startY: 240,
+          endY: 240,
+        })
+
+        this.spriteList.push(bg)
+
+
         let start = 1000
-        for(let i = 0; i < 1550; i++){
+        for(let i = 0; i < 550; i++){
           let starSprite = new Sprite('./image/star.png', true)
           const xAxis = Utilities.getRandom(0, 854)
           const scale = Utilities.getRandom(0, .01)
@@ -96,7 +136,6 @@ export default {
           start += 50
           this.spriteList.push(starSprite)
         }
-        
       },
       resize(){
         this.app.renderer.resize(window.innerWidth, window.innerHeight)
