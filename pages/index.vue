@@ -171,7 +171,7 @@ export default {
             endY: 40
           })
           start += 50
-          //this.spriteList.push(starSprite)
+          this.spriteList.push(starSprite)
         }
       },
       resize(){
