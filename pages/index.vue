@@ -79,8 +79,8 @@ export default {
             bg.moveX({
               startTime: hit.startTime,
               endTime: hit.startTime + 1000,
-              startX: hit.x,
-              endX: hit.x
+              startX: hit.x + 120,
+              endX: hit.x + 120
             })
 
             bg.moveY({
@@ -173,7 +173,7 @@ export default {
               endY: 240,
             })
 
-          this.spriteList.push(bg)
+          //-this.spriteList.push(bg)
         }
 
 
