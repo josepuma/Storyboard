@@ -12,6 +12,7 @@ export class Player {
             src: this.path
         })
 
+        //-sound.seek(105)
         sound.play()
         lastAudio = sound
     }

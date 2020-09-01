@@ -2,8 +2,11 @@
   div
     div
       .top-container
-        button.play-button(@click="playSong") Play Music
+        button.play-button(@click="playSong") Play Storyboard
         h5.position-text {{ position }}
+      .bottom-container
+        h3.title Feel Good (Ryan Kore Remix)
+        h4.title Gryffin & Illenium feat Daya
 </template>
 
 <script>
@@ -98,6 +101,40 @@ export default {
         this.spriteList.push(bg)
 
 
+        for(let i = 107500; i<120000; i+=(1400 / 2)){
+          const bg = new Sprite('./image/wallpaper.jpg', true)
+            bg.scale({
+              startTime: i,
+              endTime: i + 1370 / 2,
+              startScale: .625,
+              endScale: .680
+            })
+
+            bg.fade({
+              startTime: i,
+              endTime: i + 1370 / 2,
+              startFade: .3,
+              endFade: 0,
+            })
+
+            bg.moveX({
+              startTime: i,
+              endTime: i + 1370,
+              startX: 420,
+              endX: 420,
+            })
+
+            bg.moveY({
+              startTime: i,
+              endTime: i + 1370,
+              startY: 240,
+              endY: 240,
+            })
+
+          this.spriteList.push(bg)
+        }
+
+
         let start = 1000
         for(let i = 0; i < 550; i++){
           let starSprite = new Sprite('./image/star.png', true)
@@ -134,7 +171,7 @@ export default {
             endY: 40
           })
           start += 50
-          this.spriteList.push(starSprite)
+          //this.spriteList.push(starSprite)
         }
       },
       resize(){
@@ -160,6 +197,18 @@ export default {
       margin: 0;
       display: inline-block;
       margin-left: 20px;
+    }
+  }
+
+  .bottom-container{
+    position: absolute;
+    bottom: 3%;
+    left: 3%;
+    .title{
+      color: #fff;
+      margin-bottom: .2rem;
+      font-family: Helvetica, sans-serif;
+      font-weight: 700;
     }
   }
 
