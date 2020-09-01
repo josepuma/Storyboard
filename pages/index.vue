@@ -4,16 +4,17 @@
       .top-container
         button.play-button(@click="playSong") Play Storyboard
         h5.position-text {{ position }}
+        input(type="file", ref="osuFileUploader", @change="uploadOsuFile")
       .bottom-container
         h3.title Feel Good (Ryan Kore Remix)
         h4.title Gryffin & Illenium feat Daya 
-        //-h4 #[span.author José Puma]
 </template>
 
 <script>
 import { Player } from '../audio/player.js';
 import { Sprite } from '../storyboard/sprite.js'
 import { Storyboard } from '../storyboard/main.js'
+import { OsuFile } from '../storyboard/osu/osufile.js'
 import * as Utilities  from '../storyboard/utilities.js'
 
 export default {
@@ -22,7 +23,9 @@ export default {
       app: null,
       audio: null,
       spriteList: [],
+      osuFile: null,
       storyboard: null,
+      hitObjects: [],
       position: 0
     }
   },
@@ -52,6 +55,44 @@ export default {
             }
           }
         })
+      },
+      loadHitsAnimation(){
+        for(let i in this.hitObjects){
+            const hit = this.hitObjects[i]
+
+            let bg = new Sprite('./image/star.png', true)
+            
+            bg.fade({
+              startTime: hit.startTime,
+              endTime: hit.startTime + 1000,
+              startFade: 1,
+              endFade: 0
+            })
+
+            bg.scale({
+              startTime: hit.startTime,
+              endTime: hit.startTime + 1000,
+              startScale: .5,
+              endScale: .5
+            })
+
+            bg.moveX({
+              startTime: hit.startTime,
+              endTime: hit.startTime + 1000,
+              startX: hit.x,
+              endX: hit.x
+            })
+
+            bg.moveY({
+              startTime: hit.startTime,
+              endTime: hit.startTime + 1000,
+              startY: hit.y,
+              endY: hit.y
+            })
+
+            this.spriteList.push(bg)
+
+        }
       },
       playSong(){
         this.audio.playAudio()
@@ -101,7 +142,6 @@ export default {
 
         this.spriteList.push(bg)
 
-
         for(let i = 107500; i<120000; i+=(1400 / 2)){
           const bg = new Sprite('./image/wallpaper.jpg', true)
             bg.scale({
@@ -124,6 +164,7 @@ export default {
               startX: 420,
               endX: 420,
             })
+            
 
             bg.moveY({
               startTime: i,
@@ -165,21 +206,41 @@ export default {
             startFade: 1,
             endFade: 0
           })*/
+          /*starSprite.moveX({
+            startTime: start,
+            endTime : start * 8,
+            startX: xAxis ,
+            endX: xAxis / 2
+          })*/
+
           starSprite.moveX({
             startTime: start,
             endTime : start * 16,
-            startX: xAxis ,
-            endX: xAxis * 2
+            startX: xAxis / 2,
+            endX: xAxis * 3
           })
+
           starSprite.moveY({
             startTime: start,
             endTime : start * 16,
             startY: 480,
             endY: -20
           })
-          start += 50
-          this.spriteList.push(starSprite)
+          start += 150
+          //this.spriteList.push(starSprite)
         }
+      },
+      uploadOsuFile(){
+        const file = this.$refs.osuFileUploader.files[0]
+        this.readFile(file)
+      },
+      readFile(file){
+        this.osuFile = new OsuFile(file)
+        this.osuFile.parseFile()
+        .then(result => {
+          this.hitObjects = result
+          this.loadHitsAnimation()
+        })
       },
       resize(){
         this.app.renderer.resize(window.innerWidth, window.innerHeight)
@@ -238,6 +299,17 @@ export default {
     font-size: .8rem;
     border-radius: 16px;
     z-index: 2;
+  }
+
+  .slider-position{
+    width: 100vw;
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+    background-color: rgba(255,255,255,.3);
+    box-shadow: 0px 0px 10px 5px rgba(255,255,255,.2);
+    height: 5px;
+
   }
 
 </style>

@@ -79,7 +79,7 @@ export class Storyboard{
                         let xPosition = sprite.moveXTiming[j]
                         let positionX = xPosition.valueAtTime(position)
                         if(xPosition.isActive(position)){
-                            sprite.sprite.x = positionX * width
+                            sprite.sprite.x = (positionX) * width
                         }
                     }
                 }
