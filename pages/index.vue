@@ -1,105 +1,142 @@
 <template lang="pug">
   div
     div
+      .top-container
+        button.play-button(@click="playSong") Play Music
+        h5.position-text {{ position }}
 </template>
 
 <script>
+import { Player } from '../audio/player.js';
+import { Sprite } from '../storyboard/sprite.js'
+import { Storyboard } from '../storyboard/main.js'
+import * as Utilities  from '../storyboard/utilities.js'
+
 export default {
   data(){
     return{
       app: null,
-      warpSpeed: 0,
-      speed: 0,
-      cameraZ: 0,
-      stars: [],
-      baseSpeed: 0.025,
-      starAmount: 1000,
-      fov: 20,
-      starBaseSize: 0.05,
-      starStretch: 5
+      audio: null,
+      spriteList: [],
+      storyboard: null,
+      position: 0
     }
   },
   mounted() {
       this.startPixi();
       this.resize()
-      this.loadStartAnimation()
-      this.startAnimation()
+      this.loadStars()
+      this.loadAudio('./audios/audio.mp3')
   },
     methods: {
       startPixi() {
         this.app = new PIXI.Application({
           autoResize: true,
+          width: 854,
+          height: 480,
           resolution: devicePixelRatio 
         });
-        document.body.appendChild(this.app.view);
+        this.$el.appendChild(this.app.view)
         window.addEventListener('resize', this.resize);
-      },
-      loadStartAnimation(){
-        const starTexture = PIXI.Texture.from('./image/star.png')
-
-        for (let i = 0; i < this.starAmount; i++) {
-          const star = {
-              sprite: new PIXI.Sprite(starTexture),
-              z: 0,
-              x: 0,
-              y: 0,
-          };
-          star.sprite.anchor.x = 0.5;
-          star.sprite.anchor.y = 0.7;
-          this.randomizeStar(star, true);
-          this.app.stage.addChild(star.sprite);
-          this.stars.push(star);
-        }
-      },
-      randomizeStar(star, initial) {
-          star.z = initial ? Math.random() * 2000 : this.cameraZ + Math.random() * 1000 + 2000;
-
-          // Calculate star positions with radial random coordinate so no star hits the camera.
-          const deg = Math.random() * Math.PI * 2;
-          const distance = Math.random() * 50 + 1;
-          star.x = Math.cos(deg) * distance;
-          star.y = Math.sin(deg) * distance;
-      },
-      startAnimation(){
-        setInterval(() => {
-            this.warpSpeed = this.warpSpeed > 0 ? 0 : 1;
-        }, 5000);
-
-        // Listen for animate update
-        this.app.ticker.add((delta) => {
-            // Simple easing. This should be changed to proper easing function when used for real.
-            this.speed += (this.warpSpeed - this.speed) / 20;
-            this.cameraZ += delta * 10 * (this.speed + this.baseSpeed);
-            for (let i = 0; i < this.starAmount; i++) {
-                const star = this.stars[i];
-                if (star.z < this.cameraZ) this.randomizeStar(star);
-
-                // Map star 3d position to 2d with really simple projection
-                const z = star.z - this.cameraZ;
-                star.sprite.x = star.x * (this.fov / z) * this.app.renderer.screen.width + this.app.renderer.screen.width / 2;
-                star.sprite.y = star.y * (this.fov / z) * this.app.renderer.screen.width + this.app.renderer.screen.height / 2;
-
-                // Calculate star scale & rotation.
-                const dxCenter = star.sprite.x - this.app.renderer.screen.width / 2;
-                const dyCenter = star.sprite.y - this.app.renderer.screen.height / 2;
-                const distanceCenter = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter);
-                const distanceScale = Math.max(0, (2000 - z) / 2000);
-                star.sprite.scale.x = distanceScale * this.starBaseSize;
-                // Star is looking towards center so that y axis is towards center.
-                // Scale the star depending on how fast we are moving, what the stretchfactor is and depending on how far away it is from the center.
-                star.sprite.scale.y = distanceScale * this.starBaseSize + distanceScale * this.speed * this.starStretch * distanceCenter / this.app.renderer.screen.width;
-                star.sprite.rotation = Math.atan2(dyCenter, dxCenter) + Math.PI / 2;
+        this.storyboard = new Storyboard(this.app, this.spriteList)
+        this.app.ticker.add(delta => {
+          if(this.audio){
+            const position = this.audio.getPosition()
+            this.position = position
+            if(position > 0){
+              this.storyboard.playStoryboard(position)
             }
-        });
+          }
+        })
+      },
+      playSong(){
+        this.audio.playAudio()
+        this.storyboard.loadSprites()
+      },
+      loadAudio(audioPath){
+        this.audio = new Player(audioPath)
+      },
+      loadStars(){
 
+        let start = 1000
+        for(let i = 0; i < 1550; i++){
+          let starSprite = new Sprite('./image/star.png', true)
+          const xAxis = Utilities.getRandom(0, 854)
+          const scale = Utilities.getRandom(0, .01)
+          starSprite.scale({
+            startTime: start,
+            endTime: start * 16,
+            startScale: scale,
+            endScale: scale
+          })
+          starSprite.fade({
+            startTime: start,
+            endTime : start * 16,
+            startFade: 1,
+            endFade: 0
+          })
+          /*starSprite.fade({
+            startTime: start + 550,
+            endTime : start * 4,
+            startFade: 1,
+            endFade: 0
+          })*/
+          starSprite.moveX({
+            startTime: start,
+            endTime : start * 16,
+            startX: xAxis ,
+            endX: xAxis * 2
+          })
+          starSprite.moveY({
+            startTime: start,
+            endTime : start * 16,
+            startY: 480,
+            endY: 40
+          })
+          start += 50
+          this.spriteList.push(starSprite)
+        }
+        
       },
       resize(){
         this.app.renderer.resize(window.innerWidth, window.innerHeight)
+      }
+    },
+    beforeDestroy(){
+      if(this.audio){
+        this.audio.stopAudio()
       }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+
+  .top-container{
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    .position-text{
+      color: #fff;
+      margin: 0;
+      display: inline-block;
+      margin-left: 20px;
+    }
+  }
+
+  .play-button{
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: #fcba03;
+    color: #fff;
+    padding: .5rem 1rem;
+    font-family: Helvetica, sans-serif;
+    font-weight: 600;
+    letter-spacing: -.03rem;
+    font-size: .8rem;
+    border-radius: 16px;
+    z-index: 2;
+  }
 
 </style>
