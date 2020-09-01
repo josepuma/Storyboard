@@ -6,7 +6,8 @@
         h5.position-text {{ position }}
       .bottom-container
         h3.title Feel Good (Ryan Kore Remix)
-        h4.title Gryffin & Illenium feat Daya
+        h4.title Gryffin & Illenium feat Daya 
+        //-h4 #[span.author José Puma]
 </template>
 
 <script>
@@ -139,7 +140,7 @@ export default {
         for(let i = 0; i < 550; i++){
           let starSprite = new Sprite('./image/star.png', true)
           const xAxis = Utilities.getRandom(0, 854)
-          const scale = Utilities.getRandom(0, .01)
+          const scale = Utilities.getRandom(0, .04)
           starSprite.scale({
             startTime: start,
             endTime: start * 16,
@@ -147,7 +148,13 @@ export default {
             endScale: scale
           })
           starSprite.fade({
-            startTime: start,
+            startTime: start ,
+            endTime : start * 2,
+            startFade: 0,
+            endFade: 1
+          })
+          starSprite.fade({
+            startTime: start * 12,
             endTime : start * 16,
             startFade: 1,
             endFade: 0
@@ -168,7 +175,7 @@ export default {
             startTime: start,
             endTime : start * 16,
             startY: 480,
-            endY: 40
+            endY: -20
           })
           start += 50
           this.spriteList.push(starSprite)
@@ -209,6 +216,12 @@ export default {
       margin-bottom: .2rem;
       font-family: Helvetica, sans-serif;
       font-weight: 700;
+      letter-spacing: -.01rem;
+      text-shadow: 0px 0px 5px rgba(21,21,21,.2);
+    }
+    .author{
+      color: #fcba03;
+      text-shadow: 0px 0px 5px rgba(21,21,21,.2);
     }
   }
 

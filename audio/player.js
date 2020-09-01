@@ -21,6 +21,18 @@ export class Player {
             return Math.round(lastAudio.seek() * 1000)
         }
     }
+
+    getFFt(){
+        var analyser = Howler.ctx.createAnalyser();
+        Howler.masterGain.connect(analyser);
+        analyser.connect(Howler.ctx.destination);
+        analyser.fftSize = 1024;
+        var bufferLength = analyser.frequencyBinCount;
+        var dataArray = new Uint8Array(bufferLength);
+        return analyser.getByteTimeDomainData(dataArray);
+
+    }
+
     stopAudio(){
         if(lastAudio){
             lastAudio.stop()
