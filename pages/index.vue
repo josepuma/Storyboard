@@ -115,14 +115,14 @@ export default {
           startTime: 0,
           endTime: 12000,
           startFade: 0,
-          endFade: 1,
+          endFade: .5,
         })
 
         bg.fade({
           startTime: 12000,
           endTime: 154000,
-          startFade: 1,
-          endFade: 1,
+          startFade: .5,
+          endFade: .5,
         })
 
 
@@ -227,7 +227,7 @@ export default {
             endY: -20
           })
           start += 150
-          //this.spriteList.push(starSprite)
+          this.spriteList.push(starSprite)
         }
       },
       uploadOsuFile(){
