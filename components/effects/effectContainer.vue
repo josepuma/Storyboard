@@ -36,7 +36,7 @@ export default {
                 let starSprite = new Sprite('./image/star.png', true)
                 let xAxis = Utilities.getRandom(+this.startX, +this.endX)
                 let yAxis = Utilities.getRandom(+this.startY, +this.endY)
-                const scale = Utilities.getRandom(0, .6)
+                const scale = Utilities.getRandom(0, 1)
                 let beat = 560 
                 starSprite.scale({
                     startTime: start,
