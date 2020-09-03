@@ -38,11 +38,35 @@ export class OsuFile {
                 const line = content[i]
                 if(line != ''){
                     const hitParams = line.split(',')
+                    let hitSound;
+                    let sample = 0
+                    if(hitParams[5]){
+                        const adds = hitParams[5].split(':')
+                        /*if(adds[1] && adds[1] !== '0'){
+                            switch(adds[0]){
+                                case '1':
+                                    sample = 'normal'
+                                    break;
+                                case '2':
+                                    sample = 'soft'
+                                    break;
+                                case '3':
+                                    sample = 'drum'
+                                    break;
+                            }
+                            console.log(sample)
+                        }*/
+                        if(adds[4]){
+                            hitSound = adds[4]
+                        }
+                    }
                     objects.push(
                         new HitCircle(
                             +hitParams[0], 
                             +hitParams[1], 
-                            +hitParams[2]
+                            +hitParams[2],
+                            sample,
+                            +hitParams[4]
                         )
                     )
                 }

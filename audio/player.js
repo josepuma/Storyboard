@@ -1,10 +1,10 @@
 import {Howl, Howler} from 'howler';
-
 let lastAudio
 
 export class Player {
     constructor(path){
         this.path = path
+        this.duration = 0
     }
     playAudio(){
         this.stopAudio()
@@ -13,12 +13,28 @@ export class Player {
         })
 
         //-sound.seek(105)
-        sound.play()
-        lastAudio = sound
+        //sound.once('load', function(){
+            sound.play()
+            lastAudio = sound
+        //});
+        //sound.play()
+        
     }
     getPosition(){
         if(lastAudio){
             return Math.round(lastAudio.seek() * 1000)
+        }
+    }
+
+    getDuration(){
+        if(lastAudio){
+            return Math.round(lastAudio.duration() * 1000)
+        }
+    }
+
+    setPosition(position){
+        if(lastAudio){
+            lastAudio.seek(position / 1000)
         }
     }
 

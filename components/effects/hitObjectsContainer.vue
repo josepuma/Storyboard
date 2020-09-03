@@ -1,0 +1,156 @@
+<template lang="pug">
+    .effect-card-container
+            h5.title {{ effect.name }}
+            input(v-model="startTime")
+            input(v-model="endTime")
+            h6 Generated Sprites: {{ effect.items.length }}
+            button.save-button(@click="saveChanges()", type="button") Save
+</template>
+
+<script>
+import { Sprite } from '../../storyboard/sprite.js'
+import * as Utilities  from '../../storyboard/utilities.js'
+import { OsuFile } from '../../storyboard/osu/osufile.js'
+
+export default {
+    props: ['effect', 'uploadedFile'],
+    data(){
+        return{
+            startTime: 0,
+            endTime: 15000,
+            osuFile: null,
+            spriteList: [],
+            hitObjects: []
+        }
+    },
+    watch:{
+        uploadedFile: function(file){
+            if(file){
+                this.readFile(file)
+            }
+        }
+    },
+    mounted(){
+        if(this.uploadedFile){
+            this.readFile(this.uploadedFile)
+        }
+    },
+    methods: {
+        readFile(file){
+            this.osuFile = new OsuFile(file)
+            this.osuFile.parseFile()
+            .then(result => {
+                this.hitObjects = result
+                    this.createAnimation()
+                })
+        },
+        createAnimation(){
+            this.effect.items = []
+            for(let i in this.hitObjects){
+                const hit = this.hitObjects[i]
+
+                if(hit.hitSound == 4){
+                    const bgFinish = new Sprite('./image/wallpaper.jpg', true)
+                        bgFinish .scale({
+                        startTime: hit.startTime,
+                        endTime: hit.startTime + 1000,
+                        startScale: .625,
+                        endScale: .680
+                        })
+
+                        bgFinish .fade({
+                        startTime: hit.startTime,
+                        endTime: hit.startTime + 1000,
+                        startFade: .3,
+                        endFade: 0,
+                        })
+
+                        bgFinish .moveX({
+                        startTime: hit.startTime,
+                        endTime: hit.startTime + 1000,
+                        startX: 420,
+                        endX: 420,
+                        })
+                        
+
+                        bgFinish .moveY({
+                        startTime: hit.startTime,
+                        endTime: hit.startTime + 1000,
+                        startY: 240,
+                        endY: 240,
+                        })
+
+                        this.effect.items.push(bgFinish )
+                }
+
+                const bg = new Sprite('./image/star.png', true)
+                
+                bg.fade({
+                startTime: hit.startTime,
+                endTime: hit.startTime + 1000,
+                startFade: 1,
+                endFade: 0
+                })
+
+                bg.scale({
+                startTime: hit.startTime,
+                endTime: hit.startTime + 1000,
+                startScale: .5,
+                endScale: .5
+                })
+
+                bg.moveX({
+                startTime: hit.startTime,
+                endTime: hit.startTime + 1000,
+                startX: hit.x + 120,
+                endX: hit.x + 120
+                })
+
+                bg.moveY({
+                startTime: hit.startTime,
+                endTime: hit.startTime + 1000,
+                startY: hit.y,
+                endY: hit.y
+                })
+
+                this.effect.items.push(bg)
+
+            }
+            this.$emit('loadSprites', this.effect)
+        },
+        saveChanges(){
+            this.createAnimation()
+        }
+    }
+}
+</script>
+
+
+<style lang="scss" scoped>
+
+    .effect-card-container{
+        background-color: rgba(255,255,255, 0.3);
+        backdrop-filter: blur(15px);
+        padding: 1.5rem; 
+        width: 250px;
+        border-radius: 20px;
+        margin-top: 1rem;
+        .save-button{
+            margin-top: 1rem;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            background-color: #fcba03;
+            color: #fff;
+            padding: .5rem 1rem;
+            font-family: Helvetica, sans-serif;
+            font-weight: 600;
+            letter-spacing: -.03rem;
+            font-size: .6rem;
+            border-radius: 16px;
+            z-index: 2;
+            width: 100%;
+        }
+    }
+
+</style>

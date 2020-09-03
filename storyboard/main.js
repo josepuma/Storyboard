@@ -1,13 +1,26 @@
 const _ = require('lodash')
 
 export class Storyboard{
-    constructor(app, sprites){
+    constructor(app){
         this.app = app
-        this.sprites = sprites
+        this.sprites = []
         this.areSpritesLoaded = false
+        this.removeSprite()
+    }
+
+    async loadTextures(sprites){
+        await this.cleanSprites()
+        this.sprites = sprites
+        console.log('arrived here')
+        this.loadSprites()
+    }
+
+    async cleanSprites(){
+        while(this.app.stage.children[0]) { this.app.stage.removeChild(this.app.stage.children[0]); }
     }
 
     loadSprites(){
+        
         let width = (window.innerWidth / 854)
         let height = (window.innerHeight / 480)
         let texturesPath = []
@@ -38,6 +51,10 @@ export class Storyboard{
 
         this.areSpritesLoaded = true
 
+    }
+
+    removeSprite(){
+        
     }
 
     playStoryboard(position){
