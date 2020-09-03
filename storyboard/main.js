@@ -11,7 +11,6 @@ export class Storyboard{
     async loadTextures(sprites){
         await this.cleanSprites()
         this.sprites = sprites
-        console.log('arrived here')
         this.loadSprites()
     }
 
@@ -44,6 +43,8 @@ export class Storyboard{
                     if(this.sprites[j].isAdditive){
                         this.sprites[j].sprite.blendMode = PIXI.BLEND_MODES.ADD;
                     }
+                    this.sprites[j].getMaxLength()
+                    this.sprites[j].getMinLength()
                     this.app.stage.addChild(this.sprites[j].sprite)
                 }
             }
@@ -65,50 +66,56 @@ export class Storyboard{
         //Start ticker
             for(let i in this.sprites){
                 let sprite = this.sprites[i]
-                if(sprite.scaleTiming.length > 0){
-                    for(let j in sprite.scaleTiming){
-                        let scale = sprite.scaleTiming[j]
-                        let size = scale.valueAtTime(position) 
-                        if(scale.isActive(position)){
-                            sprite.sprite.scale.set(size * width)
-                        }else{
-                            sprite.sprite.scale.set(0)
+                
+                if(sprite.startTimeRendering <= position && position <= sprite.endTimeRendering){
+                    sprite.sprite.visible = true
+                    if(sprite.scaleTiming.length > 0){
+                        for(let j in sprite.scaleTiming){
+                            let scale = sprite.scaleTiming[j]
+                            let size = scale.valueAtTime(position) 
+                            if(scale.isActive(position)){
+                                sprite.sprite.scale.set(size * width)
+                            }
+                            /*else{
+                                sprite.sprite.scale.set(0)
+                            }*/
                         }
                     }
-                }
-
-                if(sprite.fadeTiming.length > 0){
-                    for(let j in sprite.fadeTiming){
-                        let fade = sprite.fadeTiming[j]
-                        let opacity = fade.valueAtTime(position)
-                        if(fade.isActive(position)){
-                            sprite.sprite.visible = true
-                            sprite.sprite.alpha = opacity
-                        }
-                        /*else{
-                            sprite.sprite.visible = false
-                        }*/
-                    }
-                }
-
-                if(sprite.moveXTiming.length > 0){
-                    for(let j in sprite.moveXTiming){
-                        let xPosition = sprite.moveXTiming[j]
-                        let positionX = xPosition.valueAtTime(position)
-                        if(xPosition.isActive(position)){
-                            sprite.sprite.x = (positionX) * width
+    
+                    if(sprite.fadeTiming.length > 0){
+                        for(let j in sprite.fadeTiming){
+                            let fade = sprite.fadeTiming[j]
+                            let opacity = fade.valueAtTime(position)
+                            if(fade.isActive(position)){
+                                sprite.sprite.alpha = opacity
+                            }
+                            /*else{
+                                sprite.sprite.visible = false
+                            }*/
                         }
                     }
-                }
-
-                if(sprite.moveYTiming.length > 0){
-                    for(let j in sprite.moveYTiming){
-                        let yPosition = sprite.moveYTiming[j]
-                        let positionY = yPosition.valueAtTime(position)
-                        if(yPosition.isActive(position)){
-                            sprite.sprite.y = positionY * height
+    
+                    if(sprite.moveXTiming.length > 0){
+                        for(let j in sprite.moveXTiming){
+                            let xPosition = sprite.moveXTiming[j]
+                            let positionX = xPosition.valueAtTime(position)
+                            if(xPosition.isActive(position)){
+                                sprite.sprite.x = (positionX) * width
+                            }
                         }
                     }
+    
+                    if(sprite.moveYTiming.length > 0){
+                        for(let j in sprite.moveYTiming){
+                            let yPosition = sprite.moveYTiming[j]
+                            let positionY = yPosition.valueAtTime(position)
+                            if(yPosition.isActive(position)){
+                                sprite.sprite.y = positionY * height
+                            }
+                        }
+                    }
+                }else{
+                    sprite.sprite.visible = false
                 }
 
             }

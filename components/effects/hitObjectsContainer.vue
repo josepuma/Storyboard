@@ -1,8 +1,8 @@
 <template lang="pug">
     .effect-card-container
             h5.title {{ effect.name }}
-            input(v-model="startTime")
-            input(v-model="endTime")
+            input(v-model="startTime", type="number")
+            input(v-model="endTime", type="number")
             h6 Generated Sprites: {{ effect.items.length }}
             button.save-button(@click="saveChanges()", type="button") Save
 </template>
@@ -50,12 +50,12 @@ export default {
                 const hit = this.hitObjects[i]
 
                 if(hit.hitSound == 4){
-                    const bgFinish = new Sprite('./image/wallpaper.jpg', true)
+                    const bgFinish = new Sprite('./image/flare2.png', true)
                         bgFinish .scale({
                         startTime: hit.startTime,
                         endTime: hit.startTime + 1000,
-                        startScale: .625,
-                        endScale: .680
+                        startScale: 1.5,
+                        endScale: 1.8
                         })
 
                         bgFinish .fade({
@@ -83,7 +83,55 @@ export default {
                         this.effect.items.push(bgFinish )
                 }
 
-                const bg = new Sprite('./image/star.png', true)
+                const bg = new Sprite('./image/hitcircleoverlay.png')
+                const hitObject = new Sprite('./image/hitcircle.png')
+                const approach = new Sprite('./image/approachcircle.png')
+
+                // Approach Circle
+
+                approach.fade({
+                startTime: hit.startTime - 600,
+                endTime: hit.startTime ,
+                startFade: 0,
+                endFade: 1
+                })
+                
+                approach.fade({
+                startTime: hit.startTime,
+                endTime: hit.startTime + 1000,
+                startFade: 1,
+                endFade: 0
+                })
+
+                approach.scale({
+                startTime: hit.startTime - 600,
+                endTime: hit.startTime,
+                startScale: 2,
+                endScale: .6
+                })
+
+                approach.moveX({
+                startTime: hit.startTime - 600,
+                endTime: hit.startTime + 1000,
+                startX: hit.x + 120,
+                endX: hit.x + 120
+                })
+
+                approach.moveY({
+                startTime: hit.startTime - 600,
+                endTime: hit.startTime + 1000,
+                startY: hit.y,
+                endY: hit.y
+                })
+
+                //
+
+                bg.fade({
+                startTime: hit.startTime - 1000,
+                endTime: hit.startTime ,
+                startFade: 0,
+                endFade: 1
+                })
                 
                 bg.fade({
                 startTime: hit.startTime,
@@ -93,28 +141,80 @@ export default {
                 })
 
                 bg.scale({
+                startTime: hit.startTime - 1000,
+                endTime: hit.startTime,
+                startScale: .2,
+                endScale: .6
+                })
+
+                bg.scale({
                 startTime: hit.startTime,
                 endTime: hit.startTime + 1000,
-                startScale: .5,
-                endScale: .5
+                startScale: .6,
+                endScale: .8
                 })
 
                 bg.moveX({
-                startTime: hit.startTime,
+                startTime: hit.startTime - 1000,
                 endTime: hit.startTime + 1000,
                 startX: hit.x + 120,
                 endX: hit.x + 120
                 })
 
                 bg.moveY({
-                startTime: hit.startTime,
+                startTime: hit.startTime - 1000,
                 endTime: hit.startTime + 1000,
                 startY: hit.y,
                 endY: hit.y
                 })
 
-                this.effect.items.push(bg)
+                //hitCircle
 
+                hitObject.fade({
+                startTime: hit.startTime - 1000,
+                endTime: hit.startTime,
+                startFade: 0,
+                endFade: 1
+                })
+
+                hitObject.fade({
+                startTime: hit.startTime,
+                endTime: hit.startTime + 1000,
+                startFade: 1,
+                endFade: 0
+                })
+
+                hitObject.scale({
+                startTime: hit.startTime - 1000,
+                endTime: hit.startTime,
+                startScale: .2,
+                endScale: .6
+                })
+                
+                hitObject.scale({
+                startTime: hit.startTime,
+                endTime: hit.startTime + 1000,
+                startScale: .6,
+                endScale: .8
+                })
+
+                hitObject.moveX({
+                startTime: hit.startTime - 1000,
+                endTime: hit.startTime + 1000,
+                startX: hit.x + 120,
+                endX: hit.x + 120
+                })
+
+                hitObject.moveY({
+                startTime: hit.startTime - 1000,
+                endTime: hit.startTime + 1000,
+                startY: hit.y,
+                endY: hit.y
+                })
+
+                this.effect.items.push(hitObject)
+                this.effect.items.push(bg)
+                this.effect.items.push(approach)
             }
             this.$emit('loadSprites', this.effect)
         },

@@ -71,7 +71,7 @@ export default {
   mounted() {
       this.startPixi();
       this.resize()
-      this.loadAudio('./audios/audio.mp3')
+      this.loadAudio('./audios/oneinamillion.mp3')
   },
   computed: {
     spriteList(){

@@ -2,12 +2,12 @@
     div
         .effect-card-container
             h5.title {{ effect.name }}
-            input(v-model="startTime")
-            input(v-model="endTime")
-            input(v-model="startX")
-            input(v-model="endX")
-            input(v-model="startY")
-            input(v-model="endY")
+            input(v-model="startTime", type="number")
+            input(v-model="endTime", type="number")
+            input(v-model="startX", type="number")
+            input(v-model="endX", type="number")
+            input(v-model="startY", type="number")
+            input(v-model="endY", type="number")
             h6 Generated Sprites: {{ effect.items.length }}
             button.save-button(@click="saveChanges()", type="button") Save
 </template>

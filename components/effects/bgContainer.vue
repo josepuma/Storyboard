@@ -1,8 +1,8 @@
 <template lang="pug">
     .effect-card-container
             h5.title {{ effect.name }}
-            input(v-model="startTime")
-            input(v-model="endTime")
+            input(v-model="startTime", type="number")
+            input(v-model="endTime", type="number")
             h6 Generated Sprites: {{ effect.items.length }}
             button.save-button(@click="saveChanges()", type="button") Save
 </template>
@@ -26,39 +26,39 @@ export default {
     methods: {
         createAnimation(){
             this.effect.items = []
-            let bg = new Sprite('./image/wallpaper.jpg')
+            let bg = new Sprite('./image/bg.jpg')
             bg.scale({
-            startTime: this.startTime,
-            endTime: this.endTime,
-            startScale: .625,
-            endScale: .625
+            startTime: +this.startTime,
+            endTime: +this.endTime,
+            startScale: 1,
+            endScale: 1
             })
 
             bg.fade({
-            startTime: this.startTime,
-            endTime: 12000,
+            startTime: +this.startTime,
+            endTime: +this.startTime + 2000,
             startFade: 0,
             endFade: 1,
             })
 
             bg.fade({
-            startTime: 12000,
-            endTime: this.endTime,
+            startTime: +this.startTime + 2000,
+            endTime: +this.endTime,
             startFade: 1,
             endFade: 1,
             })
 
 
             bg.moveX({
-            startTime: 0,
-            endTime: this.endTime,
+            startTime:  +this.startTime,
+            endTime: +this.endTime,
             startX: 420,
             endX: 420,
             })
 
             bg.moveY({
-            startTime: 0,
-            endTime: this.endTime,
+            startTime:  +this.startTime,
+            endTime: +this.endTime,
             startY: 240,
             endY: 240,
             })
