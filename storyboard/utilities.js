@@ -1,3 +1,5 @@
 export function getRandom(min, max){
-    return Math.random() * (max - min + 1) + min
+    let rand = Math.random()*(max-min) + min;
+    let power = Math.pow(10, 2);
+    return Math.floor(rand*power) / power;
 }
