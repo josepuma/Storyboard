@@ -1,7 +1,7 @@
 <template lang="pug">
     div
         div
-            .top-container
+            //-.top-container
                 button.play-button(@click="playSong") Play Storyboard
                 input(type="file", ref="osuFileUploader", @change="uploadOsuFile")
                 //-.effects-container
