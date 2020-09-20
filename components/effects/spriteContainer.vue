@@ -156,7 +156,7 @@ export default {
         createAnimation(){
             this.effect.items = []
             if(this.spritePath != ''){
-                const sprite = new Sprite('./image/' + this.spritePath, this.isAdditive)
+                const sprite = new Sprite('../image/' + this.spritePath, this.isAdditive)
 
                 this.properties.forEach(property => {
                     switch(property.slug){

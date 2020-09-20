@@ -57,7 +57,7 @@ export default {
                 const hit = this.hitObjects[i]
 
                 if(hit.hitSound == 4){
-                    const bgFinish = new Sprite('./image/flare2.png', true)
+                    const bgFinish = new Sprite('../image/flare2.png', true)
                         bgFinish .scale({
                         startTime: hit.startTime,
                         endTime: hit.startTime + 1000,
@@ -90,9 +90,9 @@ export default {
                         this.effect.items.push(bgFinish )
                 }
 
-                const bg = new Sprite('./image/hitcircleoverlay.png')
-                const hitObject = new Sprite('./image/hitcircle.png')
-                const approach = new Sprite('./image/approachcircle.png')
+                const bg = new Sprite('../image/hitcircleoverlay.png')
+                const hitObject = new Sprite('../image/hitcircle.png')
+                const approach = new Sprite('../image/approachcircle.png')
 
                 // Approach Circle
 

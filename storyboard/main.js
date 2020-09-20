@@ -48,10 +48,17 @@ export class Storyboard{
                     }
                     this.sprites[j].getMaxLength()
                     this.sprites[j].getMinLength()
-                    this.app.stage.addChild(this.sprites[j].sprite)
+                    //this.app.stage.addChild(this.sprites[j].sprite)
                 }
             }
         }
+
+        /*for (var textureUrl in PIXI.utils.BaseTextureCache) {
+            PIXI.utils.BaseTextureCache[textureUrl].destroy();
+        }
+        for (var textureUrl in PIXI.utils.TextureCache) {
+            PIXI.utils.TextureCache[textureUrl].destroy();
+        }*/
 
         this.areSpritesLoaded = true
 
@@ -71,54 +78,64 @@ export class Storyboard{
                 let sprite = this.sprites[i]
                 
                 if(sprite.startTimeRendering <= position && position <= sprite.endTimeRendering){
-                    sprite.sprite.visible = true
-                    if(sprite.scaleTiming.length > 0){
-                        for(let j in sprite.scaleTiming){
-                            let scale = sprite.scaleTiming[j]
-                            let size = scale.valueAtTime(position) 
-                            if(scale.isActive(position)){
-                                sprite.sprite.scale.set(size * width)
-                            }
-                            /*else{
-                                sprite.sprite.scale.set(0)
-                            }*/
-                        }
+                    if(!sprite.inStage){
+                        this.app.stage.addChild(sprite.sprite)
+                        sprite.inStage = true
+                        sprite.sprite.visible = true
                     }
-    
-                    if(sprite.fadeTiming.length > 0){
-                        for(let j in sprite.fadeTiming){
-                            let fade = sprite.fadeTiming[j]
-                            let opacity = fade.valueAtTime(position)
-                            if(fade.isActive(position)){
-                                sprite.sprite.alpha = opacity
-                            }
-                            /*else{
-                                sprite.sprite.visible = false
-                            }*/
-                        }
-                    }
-    
-                    if(sprite.moveXTiming.length > 0){
-                        for(let j in sprite.moveXTiming){
-                            let xPosition = sprite.moveXTiming[j]
-                            let positionX = xPosition.valueAtTime(position)
-                            if(xPosition.isActive(position)){
-                                sprite.sprite.x = (positionX) * width
+                    else{
+                        if(sprite.scaleTiming.length > 0){
+                            for(let j in sprite.scaleTiming){
+                                let scale = sprite.scaleTiming[j]
+                                let size = scale.valueAtTime(position) 
+                                if(scale.isActive(position)){
+                                    sprite.sprite.scale.set(size * width)
+                                }
+                                /*else{
+                                    sprite.sprite.scale.set(0)
+                                }*/
                             }
                         }
-                    }
-    
-                    if(sprite.moveYTiming.length > 0){
-                        for(let j in sprite.moveYTiming){
-                            let yPosition = sprite.moveYTiming[j]
-                            let positionY = yPosition.valueAtTime(position)
-                            if(yPosition.isActive(position)){
-                                sprite.sprite.y = positionY * height
+        
+                        if(sprite.fadeTiming.length > 0){
+                            for(let j in sprite.fadeTiming){
+                                let fade = sprite.fadeTiming[j]
+                                let opacity = fade.valueAtTime(position)
+                                if(fade.isActive(position)){
+                                    sprite.sprite.alpha = opacity
+                                }
+                                /*else{
+                                    sprite.sprite.visible = false
+                                }*/
                             }
                         }
-                    }
+        
+                        if(sprite.moveXTiming.length > 0){
+                            for(let j in sprite.moveXTiming){
+                                let xPosition = sprite.moveXTiming[j]
+                                let positionX = xPosition.valueAtTime(position)
+                                if(xPosition.isActive(position)){
+                                    sprite.sprite.x = (positionX) * width
+                                }
+                            }
+                        }
+        
+                        if(sprite.moveYTiming.length > 0){
+                            for(let j in sprite.moveYTiming){
+                                let yPosition = sprite.moveYTiming[j]
+                                let positionY = yPosition.valueAtTime(position)
+                                if(yPosition.isActive(position)){
+                                    sprite.sprite.y = positionY * height
+                                }
+                            }
+                        }
+                    }     
                 }else{
-                    sprite.sprite.visible = false
+                    if(sprite.inStage){
+                        sprite.sprite.visible = false
+                        this.app.stage.removeChild(sprite.sprite);
+                    }
+                    
                 }
 
             }

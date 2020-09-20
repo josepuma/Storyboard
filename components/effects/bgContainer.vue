@@ -32,7 +32,7 @@ export default {
     methods: {
         createAnimation(){
             this.effect.items = []
-            let bg = new Sprite('./image/bg.jpg')
+            let bg = new Sprite('../image/bg.jpg')
             bg.scale({
             startTime: +this.startTime,
             endTime: +this.endTime,

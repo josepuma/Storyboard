@@ -17,6 +17,7 @@ export class Sprite {
         this.moveYTiming = []
         this.startTimeRendering = 0
         this.endTimeRendering = 0
+        this.inStage = false
         this.times = []
     }
 

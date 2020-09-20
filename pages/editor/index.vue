@@ -13,18 +13,19 @@
                 div(class="uk-width-expand")
                     div
                         .uk-position-relative(uk-height-viewport)
+                            storyboardPlayer(:audioPosition="position")
                             .uk-position-bottom
                                 .player-container
                                     nav.uk-navbar.uk-navbar-container.uk-navbar-transparent
                                         .uk-navbar-center  
                                             .uk-navbar-item
                                                 div 
-                                                    span 00:00:00s
+                                                    span {{ currentPosition }}
                                                     a.uk-margin-small-left(uk-icon="icon: skip-back; ratio: .8;")
                                             .uk-navbar-item
                                                 div
                                                     .play-icon
-                                                        a(uk-icon="icon: play; ratio: .8;")
+                                                        button(uk-icon="icon: play; ratio: .8;", @click="playSong", type="button")
                                             .uk-navbar-item
                                                     div 
                                                         a.uk-margin-small-right(uk-icon="icon: skip-forward; ratio: .8;")
@@ -34,11 +35,56 @@
                                                 div
                                                     button.uk-margin-small-right.uk-button.secondary-button Share
                                                     button.uk-button.primary-button Export
+
+
+                                        
 </template>
 
 <script>
+
+import storyboardPlayer from '@/components/player/storyboard'
+
+import { Player } from '../../audio/player.js';
 export default {
-    
+    data(){
+        return{
+            audio: null,
+            position: 0,
+        }
+    },
+    components: {
+        storyboardPlayer
+    },
+    computed:{
+        currentPosition(){
+            let milliseconds = parseInt((this.position % 1000) / 100),
+                seconds = Math.floor((this.position / 1000) % 60),
+                minutes = Math.floor((this.position/ (1000 * 60)) % 60),
+                hours = Math.floor((this.position / (1000 * 60 * 60)) % 24);
+
+            hours = (hours < 10) ? "0" + hours : hours;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+        }
+    },  
+    mounted(){
+        this.loadAudio('../audios/oneinamillion.mp3')
+    },
+    methods: {
+        loadAudio(audioPath){
+            this.audio = new Player(audioPath)
+        },
+        playSong(){
+            this.audio.playAudio()
+            let vm = this
+            setInterval(() => {
+                vm.position = vm.audio.getPosition()
+            }, 16)
+            //this.loadSprites()
+        },
+    }
 }
 </script>
 
@@ -61,6 +107,7 @@ export default {
     }
 
     .player-container{
+        background-color: rgba($darker-background-color, .9);
         border-top: 1px solid rgba($base-color, .05);
     }
 

@@ -60,7 +60,7 @@ export default {
             this.effect.items = []
             console.log(this.isAdditive)
             for(let start = this.startTime; start < this.endTime; start+=150){
-                let starSprite = new Sprite('./image/star2.png', this.isAdditive)
+                let starSprite = new Sprite('../image/star2.png', this.isAdditive)
                 let xAxis = Utilities.getRandom(+this.startX, +this.endX)
                 let yAxis = Utilities.getRandom(+this.startY, +this.endY)
                 const scale = Utilities.getRandom(0, 1)
