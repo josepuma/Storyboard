@@ -8,15 +8,18 @@
         .effects-container
           h5.particles-title {{ spriteList.length }} loaded sprites
           button.play-button(@click="addEffect") Add Effect
-          template(v-for="effect in effects")
-            effectContainer(:effect="effect", v-if="effect.name == 'Particles'", @loadSprites="loadSprites")
-            bgContainer(:effect="effect", v-if="effect.name == 'Background'", @loadSprites="loadSprites")
-            hitObjectsContainer(:effect="effect", :uploadedFile="fileUpload" v-if="effect.name == 'HitObject'", @loadSprites="loadSprites")
+          button.play-button(@click="addSprite") Add Sprite
+          div(uk-grid, class="uk-grid-small uk-child-width-1-1")
+            template(v-for="effect in effects")
+              effectContainer(:effect="effect", :key="effect.id", v-if="effect.name == 'Particles'", @loadSprites="loadSprites")
+              //-bgContainer(:effect="effect", :key="effect.id", v-if="effect.name == 'Background'", @loadSprites="loadSprites")
+              spriteContainer(:effect="effect", :key="effect.id", v-if="effect.name == 'Sprite'", @loadSprites="loadSprites", @removeEffect="removeEffect")
+              hitObjectsContainer(:effect="effect", :key="effect.id", :uploadedFile="fileUpload" v-if="effect.name == 'HitObject'", @loadSprites="loadSprites")
       .bottom-container
         input(type="range", min="0", :max="duration", v-model="newPosition", @mouseup="leaveRangePosition" @mousedown="changePosition")
-        h5.particles-title {{ duration }}
-        h3.title Feel Good (Ryan Kore Remix)
-        h4.title Gryffin & Illenium feat Daya 
+        //-h5.particles-title {{ duration }}
+        //-h3.title Feel Good (Ryan Kore Remix)
+        //-h4.title Gryffin & Illenium feat Daya 
 </template>
 
 <script>
@@ -24,6 +27,7 @@
 import effectContainer from '@/components/effects/effectContainer'
 import bgContainer from '@/components/effects/bgContainer'
 import hitObjectsContainer from '@/components/effects/hitObjectsContainer'
+import spriteContainer from '@/components/effects/spriteContainer'
 
 import { Player } from '../audio/player.js';
 import { Sprite } from '../storyboard/sprite.js'
@@ -32,6 +36,7 @@ import { OsuFile } from '../storyboard/osu/osufile.js'
 import * as Utilities  from '../storyboard/utilities.js'
 
 const _ = require('lodash')
+const uniqid = require('uniqid');
 
 export default {
   data(){
@@ -45,12 +50,7 @@ export default {
       fileUpload: null,
       effects: [
         {
-          name: 'Background',
-          startTime: 0,
-          endTime: 250000,
-          items: []
-        },
-        {
+          id: '1',
           name: 'HitObject',
           startTime: 0,
           endTime: 250000,
@@ -66,7 +66,8 @@ export default {
   components: {
     effectContainer,
     bgContainer,
-    hitObjectsContainer
+    hitObjectsContainer,
+    spriteContainer
   },
   mounted() {
       this.startPixi();
@@ -83,6 +84,11 @@ export default {
     }
   },
     methods: {
+      removeEffect(sprite){
+        const position = this.effects.indexOf(sprite)
+        this.effects.splice(position, 1)
+        //this.loadSprites()
+      },
       leaveRangePosition(){
         this.manualPosition = false
         this.audio.setPosition(this.newPosition)
@@ -97,7 +103,15 @@ export default {
       },
       addEffect(){
         this.effects.push({
+          id: uniqid(),
           name: 'Particles',
+          items: []
+        })
+      }, 
+      addSprite(){
+        this.effects.push({
+          id: uniqid(),
+          name: 'Sprite',
           items: []
         })
       }, 

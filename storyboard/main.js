@@ -40,8 +40,11 @@ export class Storyboard{
                     this.sprites[j].sprite.x = (this.app.screen.width / 2) * width;
                     this.sprites[j].sprite.y = (this.app.screen.height / 2) * height;
                     this.sprites[j].sprite.visible = false
+                    //console.log(this.sprites[j].isAdditive)
                     if(this.sprites[j].isAdditive){
                         this.sprites[j].sprite.blendMode = PIXI.BLEND_MODES.ADD;
+                    }else{
+                        this.sprites[j].sprite.blendMode = PIXI.BLEND_MODES.NORMAL
                     }
                     this.sprites[j].getMaxLength()
                     this.sprites[j].getMinLength()

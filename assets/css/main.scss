@@ -1,0 +1,21 @@
+h1, h2, h3, h4, h5, h6{
+    font-family: $content-font!important;
+    font-weight: 600;
+    margin: 0;
+}
+
+p, a, li, button, input, label, .uk-input .uk-textarea, .uk-form-label, .uk-select, .vdpComponent{
+    font-family: $content-font!important;
+    font-weight: 500;
+    font-size: .8rem;
+}
+
+button{
+    &.uk-button{
+        font-family: $content-font!important;
+        font-weight: 600;
+        font-size: .8rem;
+        text-transform: capitalize;
+        border-radius: $default-border-radius;
+    }
+}

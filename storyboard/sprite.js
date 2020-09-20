@@ -9,7 +9,7 @@ export class Sprite {
     constructor(spritePath, isAdditive){
         this.spritePath = spritePath
         this.sprite = null
-        this.isAdditive = isAdditive || false
+        this.isAdditive = isAdditive
         //Properties
         this.scaleTiming = []
         this.fadeTiming = []

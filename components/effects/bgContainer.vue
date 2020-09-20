@@ -1,10 +1,16 @@
 <template lang="pug">
-    .effect-card-container
-            h5.title {{ effect.name }}
-            input(v-model="startTime", type="number")
-            input(v-model="endTime", type="number")
-            h6 Generated Sprites: {{ effect.items.length }}
-            button.save-button(@click="saveChanges()", type="button") Save
+    div
+        .effect-card-container
+            .header.uk-cover-container
+                img(src="https://static.dribbble.com/users/137756/screenshots/4898734/cfad50c8-f916-496f-a44f-ad6c0b2081b4.jpeg", uk-cover)
+            .container
+                form
+                    .uk-margin-small
+                        input.uk-input.uk-form-small(v-model="startTime", type="number")
+                    .uk-margin-small
+                        input.uk-input.uk-form-small(v-model="endTime", type="number")
+                //h6 Generated Sprites: {{ effect.items.length }}
+                //button.save-button(@click="saveChanges()", type="button") Save
 </template>
 
 <script>
@@ -76,13 +82,19 @@ export default {
 
 <style lang="scss" scoped>
 
+    .header{
+        height: 2.5rem;
+    }
+
     .effect-card-container{
         background-color: rgba(255,255,255, 0.3);
-        backdrop-filter: blur(15px);
-        padding: 1.5rem; 
         width: 250px;
         border-radius: 20px;
-        margin-top: 1rem;
+        overflow: hidden;
+        background-color: $base-color;
+        .container{
+            padding: 1rem; 
+        }
         .save-button{
             margin-top: 1rem;
             cursor: pointer;

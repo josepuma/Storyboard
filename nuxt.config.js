@@ -19,16 +19,24 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap' }
+    ],
+    script: [
+      { src: '/js/uikit.min.js' },
+      { src: '/js/uikit-icons.min.js' },
     ]
   },
   /*
   ** Global CSS
   */
   css: [
+    '@/assets/uikit/uikit.min.css',
+    '@/assets/css/main.scss',
+    '@/assets/css/tooltip.scss'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -52,8 +60,14 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/style-resources',
     '@nuxtjs/axios',
   ],
+  styleResources: {
+    scss: [
+      '@/assets/css/vars.scss',
+    ]
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
@@ -64,5 +78,9 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    filenames: {
+        app: ({ isDev }) => isDev ? '[name].[hash].js' : '[chunkhash].js',
+        chunk: ({ isDev }) => isDev ? '[name].[hash].js' : '[chunkhash].js'
+      }
   }
 }

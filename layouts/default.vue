@@ -1,15 +1,12 @@
-<template>
-  <div>
-    <Nuxt />
-  </div>
+<template lang="pug">
+    div
+        nuxt
 </template>
 
 <style lang="scss">
 
-  html, body, *{
-    margin: 0;
-    padding: 0;
-    font-family: Helvetica, sans-serif;
-  }
+    html, body{
+        background-color: $darker-background-color;
+    }
 
 </style>
